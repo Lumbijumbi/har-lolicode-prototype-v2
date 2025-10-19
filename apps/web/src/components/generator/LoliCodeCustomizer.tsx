@@ -10,7 +10,7 @@ interface LoliCodeCustomizerProps {
   onGenerate: (config: LoliCodeConfig) => void;
 }
 
-export function LoliCodeCustomizer({ entries, dependencyMatrix, onGenerate }: LoliCodeCustomizerProps) {
+export function LoliCodeCustomizer({ entries, onGenerate }: LoliCodeCustomizerProps) {
 
   const handleGenerate = () => {
     // For this placeholder, we'll just select all entries.

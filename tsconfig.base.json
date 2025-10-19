@@ -18,7 +18,8 @@
     "removeComments": false,
     "sourceMap": true,
     "declaration": true,
-    "composite": true
+    "composite": true,
+    "downlevelIteration": true
   },
   "exclude": ["node_modules"]
 }

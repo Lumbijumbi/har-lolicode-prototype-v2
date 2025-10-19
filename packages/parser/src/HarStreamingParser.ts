@@ -65,7 +65,8 @@ export class HarStreamingParser {
     try {
       harData = JSON.parse(harContent);
     } catch (error) {
-      throw new Error(`INVALID_HAR_STRUCTURE: Invalid JSON - ${error.message}`);
+      const errorMessage = error instanceof Error ? error.message : 'Unknown error';
+      throw new Error(`INVALID_HAR_STRUCTURE: Invalid JSON - ${errorMessage}`);
     }
 
     onProgress?.(0.2, 'Validating HAR schema...');
@@ -97,7 +98,8 @@ export class HarStreamingParser {
         const semanticEntry = this.transformEntry(entry, i);
         semanticEntries.push(semanticEntry);
       } catch (error) {
-        console.warn(`Failed to parse entry ${i}:`, error.message);
+        const errorMessage = error instanceof Error ? error.message : 'Unknown error';
+        console.warn(`Failed to parse entry ${i}:`, errorMessage);
         // Continue processing other entries
       }
 

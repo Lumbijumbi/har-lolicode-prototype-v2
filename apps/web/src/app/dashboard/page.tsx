@@ -6,7 +6,7 @@
 'use client';
 
 import React, { useState, useMemo, useCallback, useEffect } from 'react';
-import { useAppSelector, useAppDispatch } from '@/store';
+import { useAppSelector } from '@/store';
 import { applyFilters } from '@har2lolicode/filter';
 import { buildDependencyMatrix } from '@har2lolicode/analyzer';
 import { generateLoliCode } from '@har2lolicode/generator';
@@ -21,17 +21,14 @@ import { TokenDetectionPanel } from '@/components/analysis/TokenDetectionPanel';
 import { LoliCodeCustomizer } from '@/components/generator/LoliCodeCustomizer';
 import { LoliCodePreview } from '@/components/generator/LoliCodePreview';
 import { DependencyGraph } from '@/components/analysis/DependencyGraph';
-import { Button } from '@/components/ui/button';
 import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs';
 import { Badge } from '@/components/ui/badge';
 import { toast } from '@/components/ui/use-toast';
 
 export default function DashboardPage() {
   // Redux state
-  const dispatch = useAppDispatch();
   const { currentWorkspace } = useAppSelector(state => state.workspace);
   const filterState = useAppSelector(state => state.filter);
-  const { isAnalyzing, progress } = useAppSelector(state => state.analysis);
 
   // Local state
   const [selectedEntry, setSelectedEntry] = useState<SemanticHarEntry | null>(null);
@@ -121,9 +118,10 @@ export default function DashboardPage() {
         variant: "success"
       });
     } catch (error) {
+      const errorMessage = error instanceof Error ? error.message : 'Unknown error occurred';
       toast({
         title: "Generation Failed",
-        description: error.message,
+        description: errorMessage,
         variant: "destructive"
       });
     }
@@ -229,7 +227,7 @@ export default function DashboardPage() {
         </div>
 
         {/* Main Content Tabs */}
-        <Tabs value={activeTab} onValueChange={(v) => setActiveTab(v as any)}>
+        <Tabs value={activeTab} onValueChange={(v) => setActiveTab(v as 'requests' | 'dependencies' | 'generator')}>
           <TabsList className="bg-black border border-gold-primary/30">
             <TabsTrigger
               value="requests"

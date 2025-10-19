@@ -8,7 +8,7 @@ interface DependencyGraphProps {
   onNodeClick: (index: number) => void;
 }
 
-export function DependencyGraph({ entries, matrix, onNodeClick }: DependencyGraphProps) {
+export function DependencyGraph({ entries }: DependencyGraphProps) {
   return (
     <div className="p-4 border border-dashed border-gray-600 rounded-lg h-96">
       <h3 className="text-lg font-semibold text-white">Dependency Graph</h3>

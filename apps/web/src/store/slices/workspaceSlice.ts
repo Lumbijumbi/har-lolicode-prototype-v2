@@ -1,14 +1,14 @@
 import { createSlice, PayloadAction } from '@reduxjs/toolkit';
 import type { SemanticHarEntry } from '@har2lolicode/parser';
 
-interface Workspace {
+export interface Workspace {
   id: string;
   name: string;
   harEntries: SemanticHarEntry[];
   createdAt: string;
 }
 
-interface WorkspaceState {
+export interface WorkspaceState {
   workspaces: Workspace[];
   currentWorkspace: Workspace | null;
 }
