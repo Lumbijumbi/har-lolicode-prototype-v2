@@ -1,6 +1,7 @@
 import './globals.css'
 import type { Metadata } from 'next'
 import { ReduxProvider } from '@/components/providers/ReduxProvider'
+import { Navigation } from '@/components/layout/Navigation'
 
 export const metadata: Metadata = {
   title: 'HAR2LoliCode',
@@ -15,7 +16,12 @@ export default function RootLayout({
   return (
     <html lang="en">
       <body className="font-sans">
-        <ReduxProvider>{children}</ReduxProvider>
+        <ReduxProvider>
+          <Navigation />
+          <main className="lg:ml-64">
+            {children}
+          </main>
+        </ReduxProvider>
       </body>
     </html>
   )

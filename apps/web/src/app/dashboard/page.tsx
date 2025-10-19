@@ -20,7 +20,7 @@ import { RequestDetailModal } from '@/components/analysis/RequestDetailModal';
 import { TokenDetectionPanel } from '@/components/analysis/TokenDetectionPanel';
 import { LoliCodeCustomizer } from '@/components/generator/LoliCodeCustomizer';
 import { LoliCodePreview } from '@/components/generator/LoliCodePreview';
-import { DependencyGraph } from '@/components/analysis/DependencyGraph';
+import { DependencyGraphLazy } from '@/components/analysis/DependencyGraphLazy';
 import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs';
 import { Badge } from '@/components/ui/badge';
 import { toast } from '@/components/ui/use-toast';
@@ -146,8 +146,8 @@ export default function DashboardPage() {
   }, [generatedCode]);
 
   return (
-    <div className="min-h-screen bg-black p-6">
-      <div className="max-w-[1920px] mx-auto space-y-6">
+    <div className="min-h-screen bg-black p-4 md:p-6">
+      <div className="max-w-[1920px] mx-auto space-y-4 md:space-y-6">
         {/* Header */}
         <div className="bg-gradient-to-r from-black via-gold-primary/10 to-black rounded-lg p-6 border border-gold-primary/30">
           <div className="flex justify-between items-start">
@@ -302,7 +302,7 @@ export default function DashboardPage() {
 
           <TabsContent value="dependencies">
             {dependencyMatrix && (
-              <DependencyGraph
+              <DependencyGraphLazy
                 entries={filteredEntries}
                 matrix={dependencyMatrix}
                 onNodeClick={(index) => openDetailModal(filteredEntries[index], index)}
@@ -310,8 +310,8 @@ export default function DashboardPage() {
             )}
           </TabsContent>
 
-          <TabsContent value="generator" className="space-y-6">
-            <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
+          <TabsContent value="generator" className="space-y-4 md:space-y-6">
+            <div className="grid grid-cols-1 xl:grid-cols-2 gap-4 md:gap-6">
               <LoliCodeCustomizer
                 entries={filteredEntries}
                 dependencyMatrix={dependencyMatrix!}
