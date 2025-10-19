@@ -2,17 +2,59 @@
 @tailwind components;
 @tailwind utilities;
 
-/* In a real Next.js app, we would import cssVariables from goldTheme.ts and inject it.
-   Since we can't do that in this environment, I am hardcoding the keyframes.
-   A better setup would involve a script or a PostCSS plugin to handle this. */
+/* Theme Variables - Gold & Black Theme with Accessibility Considerations */
 :root {
+    /* Primary Colors */
     --gold-primary: #D4AF37;
     --gold-secondary: #B8860B;
     --gold-tertiary: #8B7500;
+    --gold-light: #F4E4A6;
+    --gold-dark: #6B5900;
+    
+    /* Background Colors */
     --black-pure: #000000;
     --black-soft: #0A0A0A;
+    --black-medium: #1A1A1A;
+    --black-light: #2A2A2A;
+    
+    /* Semantic Colors */
+    --success: #10B981;
+    --warning: #F59E0B;
+    --error: #EF4444;
+    --info: #3B82F6;
+    
+    /* Text Colors - Improved contrast ratios for accessibility */
+    --text-primary: #FFFFFF;
+    --text-secondary: #D1D5DB;
+    --text-tertiary: #9CA3AF;
+    --text-disabled: #6B7280;
+    
+    /* Spacing */
+    --spacing-xs: 0.25rem;
+    --spacing-sm: 0.5rem;
+    --spacing-md: 1rem;
+    --spacing-lg: 1.5rem;
+    --spacing-xl: 2rem;
+    
+    /* Border Radius */
+    --radius-sm: 0.25rem;
+    --radius-md: 0.5rem;
+    --radius-lg: 0.75rem;
+    --radius-xl: 1rem;
+    
+    /* Transitions */
+    --transition-fast: 150ms ease-in-out;
+    --transition-normal: 250ms ease-in-out;
+    --transition-slow: 350ms ease-in-out;
+    
+    /* Z-Index Layers */
+    --z-dropdown: 1000;
+    --z-modal: 2000;
+    --z-tooltip: 3000;
+    --z-toast: 4000;
 }
 
+/* Animations */
 @keyframes goldPulse {
     0%, 100% {
         opacity: 1;
@@ -42,7 +84,148 @@
     }
 }
 
+@keyframes fadeIn {
+    from {
+        opacity: 0;
+        transform: translateY(-10px);
+    }
+    to {
+        opacity: 1;
+        transform: translateY(0);
+    }
+}
+
+@keyframes slideIn {
+    from {
+        transform: translateX(-100%);
+    }
+    to {
+        transform: translateX(0);
+    }
+}
+
+@keyframes spin {
+    to {
+        transform: rotate(360deg);
+    }
+}
+
+/* Base Styles */
+* {
+    box-sizing: border-box;
+}
+
+html {
+    scroll-behavior: smooth;
+}
+
 body {
-  color: white;
-  background: black;
+    color: var(--text-primary);
+    background: var(--black-pure);
+    font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', 'Roboto', 'Oxygen', 
+                 'Ubuntu', 'Cantarell', 'Fira Sans', 'Droid Sans', 'Helvetica Neue', sans-serif;
+    -webkit-font-smoothing: antialiased;
+    -moz-osx-font-smoothing: grayscale;
+    line-height: 1.6;
+    min-height: 100vh;
+}
+
+/* Accessibility: Focus Styles */
+*:focus-visible {
+    outline: 2px solid var(--gold-primary);
+    outline-offset: 2px;
+}
+
+/* Utility Classes */
+@layer components {
+    .gold-gradient {
+        background: linear-gradient(135deg, var(--gold-tertiary) 0%, var(--gold-primary) 50%, var(--gold-secondary) 100%);
+    }
+    
+    .gold-text-gradient {
+        background: linear-gradient(135deg, var(--gold-primary), var(--gold-light));
+        -webkit-background-clip: text;
+        -webkit-text-fill-color: transparent;
+        background-clip: text;
+    }
+    
+    .glass-effect {
+        background: rgba(10, 10, 10, 0.7);
+        backdrop-filter: blur(10px);
+        border: 1px solid rgba(212, 175, 55, 0.2);
+    }
+    
+    .loading-spinner {
+        display: inline-block;
+        width: 1.5rem;
+        height: 1.5rem;
+        border: 3px solid rgba(212, 175, 55, 0.3);
+        border-radius: 50%;
+        border-top-color: var(--gold-primary);
+        animation: spin 0.8s linear infinite;
+    }
+    
+    .hover-lift {
+        transition: transform var(--transition-normal);
+    }
+    
+    .hover-lift:hover {
+        transform: translateY(-2px);
+    }
+    
+    .fade-in {
+        animation: fadeIn var(--transition-normal);
+    }
+}
+
+/* Scrollbar Styling */
+::-webkit-scrollbar {
+    width: 12px;
+    height: 12px;
+}
+
+::-webkit-scrollbar-track {
+    background: var(--black-soft);
+}
+
+::-webkit-scrollbar-thumb {
+    background: var(--gold-tertiary);
+    border-radius: var(--radius-md);
+}
+
+::-webkit-scrollbar-thumb:hover {
+    background: var(--gold-secondary);
+}
+
+/* Selection Styling */
+::selection {
+    background-color: var(--gold-primary);
+    color: var(--black-pure);
+}
+
+/* Responsive Typography */
+@media (max-width: 640px) {
+    html {
+        font-size: 14px;
+    }
+}
+
+@media (min-width: 641px) and (max-width: 1024px) {
+    html {
+        font-size: 15px;
+    }
+}
+
+@media (min-width: 1025px) {
+    html {
+        font-size: 16px;
+    }
+}
+
+/* Print Styles */
+@media print {
+    body {
+        background: white;
+        color: black;
+    }
 }

@@ -1,7 +1,7 @@
 import { createSlice, PayloadAction } from '@reduxjs/toolkit';
 import type { DependencyMatrix } from '@har2lolicode/analyzer';
 
-interface AnalysisState {
+export interface AnalysisState {
   isAnalyzing: boolean;
   progress: number;
   results: {

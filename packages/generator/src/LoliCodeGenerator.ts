@@ -125,7 +125,7 @@ export class LoliCodeGenerator {
     while (remaining.size > 0) {
       let foundIndependent = false;
 
-      for (const index of remaining) {
+      for (const index of Array.from(remaining)) {
         // Check if all dependencies are satisfied
         let canAdd = true;
         for (let j = 0; j < matrix.adjacencyMatrix.length; j++) {
@@ -176,19 +176,19 @@ export class LoliCodeGenerator {
   private generateSettings(settings: LoliCodeConfig['settings']): string {
     const lines: string[] = ['SETTINGS'];
 
-    if (settings.useProxy) {
+    if (settings?.useProxy) {
       lines.push('  UseProxy: true');
     }
 
-    if (settings.followRedirects !== undefined) {
+    if (settings?.followRedirects !== undefined) {
       lines.push(`  FollowRedirects: ${settings.followRedirects}`);
     }
 
-    if (settings.timeout) {
+    if (settings?.timeout) {
       lines.push(`  Timeout: ${settings.timeout}`);
     }
 
-    if (settings.retryCount) {
+    if (settings?.retryCount) {
       lines.push(`  RetryCount: ${settings.retryCount}`);
     }
 

@@ -4,7 +4,7 @@
  */
 
 import type { SemanticHarEntry } from '@har2lolicode/parser';
-import type { FilterState, SemanticFilterRule } from './filterSlice';
+import type { FilterState, SemanticFilterRule, FilterTarget } from './filterSlice';
 import {
   StringOperators,
   NumericOperators,
@@ -194,6 +194,7 @@ export function importFilterConfig(json: string): FilterState {
       isActive: true
     };
   } catch (error) {
-    throw new Error(`Invalid filter configuration: ${error.message}`);
+    const errorMessage = error instanceof Error ? error.message : 'Unknown error';
+    throw new Error(`Invalid filter configuration: ${errorMessage}`);
   }
 }

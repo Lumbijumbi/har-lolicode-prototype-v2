@@ -6,7 +6,7 @@
 'use client';
 
 import React, { useState, useMemo, useCallback, useEffect } from 'react';
-import { useAppSelector, useAppDispatch } from '@/store';
+import { useAppSelector } from '@/store';
 import { applyFilters } from '@har2lolicode/filter';
 import { buildDependencyMatrix } from '@har2lolicode/analyzer';
 import { generateLoliCode } from '@har2lolicode/generator';
@@ -20,18 +20,16 @@ import { RequestDetailModal } from '@/components/analysis/RequestDetailModal';
 import { TokenDetectionPanel } from '@/components/analysis/TokenDetectionPanel';
 import { LoliCodeCustomizer } from '@/components/generator/LoliCodeCustomizer';
 import { LoliCodePreview } from '@/components/generator/LoliCodePreview';
-import { DependencyGraph } from '@/components/analysis/DependencyGraph';
-import { Button } from '@/components/ui/button';
+import { DependencyGraphLazy } from '@/components/analysis/DependencyGraphLazy';
+import { HARUploader } from '@/components/upload/HARUploader';
 import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs';
 import { Badge } from '@/components/ui/badge';
 import { toast } from '@/components/ui/use-toast';
 
 export default function DashboardPage() {
   // Redux state
-  const dispatch = useAppDispatch();
   const { currentWorkspace } = useAppSelector(state => state.workspace);
   const filterState = useAppSelector(state => state.filter);
-  const { isAnalyzing, progress } = useAppSelector(state => state.analysis);
 
   // Local state
   const [selectedEntry, setSelectedEntry] = useState<SemanticHarEntry | null>(null);
@@ -42,6 +40,17 @@ export default function DashboardPage() {
 
   // Get HAR entries from workspace
   const harEntries = currentWorkspace?.harEntries || [];
+
+  // Show uploader if no HAR data
+  if (harEntries.length === 0) {
+    return (
+      <div className="min-h-screen bg-black p-4 md:p-6">
+        <div className="max-w-4xl mx-auto">
+          <HARUploader />
+        </div>
+      </div>
+    );
+  }
 
   // Memoized filtered entries
   const filteredEntries = useMemo(() => {
@@ -121,9 +130,10 @@ export default function DashboardPage() {
         variant: "success"
       });
     } catch (error) {
+      const errorMessage = error instanceof Error ? error.message : 'Unknown error occurred';
       toast({
         title: "Generation Failed",
-        description: error.message,
+        description: errorMessage,
         variant: "destructive"
       });
     }
@@ -148,8 +158,8 @@ export default function DashboardPage() {
   }, [generatedCode]);
 
   return (
-    <div className="min-h-screen bg-black p-6">
-      <div className="max-w-[1920px] mx-auto space-y-6">
+    <div className="min-h-screen bg-black p-4 md:p-6">
+      <div className="max-w-[1920px] mx-auto space-y-4 md:space-y-6">
         {/* Header */}
         <div className="bg-gradient-to-r from-black via-gold-primary/10 to-black rounded-lg p-6 border border-gold-primary/30">
           <div className="flex justify-between items-start">
@@ -229,7 +239,7 @@ export default function DashboardPage() {
         </div>
 
         {/* Main Content Tabs */}
-        <Tabs value={activeTab} onValueChange={(v) => setActiveTab(v as any)}>
+        <Tabs value={activeTab} onValueChange={(v) => setActiveTab(v as 'requests' | 'dependencies' | 'generator')}>
           <TabsList className="bg-black border border-gold-primary/30">
             <TabsTrigger
               value="requests"
@@ -304,7 +314,7 @@ export default function DashboardPage() {
 
           <TabsContent value="dependencies">
             {dependencyMatrix && (
-              <DependencyGraph
+              <DependencyGraphLazy
                 entries={filteredEntries}
                 matrix={dependencyMatrix}
                 onNodeClick={(index) => openDetailModal(filteredEntries[index], index)}
@@ -312,8 +322,8 @@ export default function DashboardPage() {
             )}
           </TabsContent>
 
-          <TabsContent value="generator" className="space-y-6">
-            <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
+          <TabsContent value="generator" className="space-y-4 md:space-y-6">
+            <div className="grid grid-cols-1 xl:grid-cols-2 gap-4 md:gap-6">
               <LoliCodeCustomizer
                 entries={filteredEntries}
                 dependencyMatrix={dependencyMatrix!}
