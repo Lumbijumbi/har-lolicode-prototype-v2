@@ -21,6 +21,7 @@ import { TokenDetectionPanel } from '@/components/analysis/TokenDetectionPanel';
 import { LoliCodeCustomizer } from '@/components/generator/LoliCodeCustomizer';
 import { LoliCodePreview } from '@/components/generator/LoliCodePreview';
 import { DependencyGraphLazy } from '@/components/analysis/DependencyGraphLazy';
+import { HARUploader } from '@/components/upload/HARUploader';
 import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs';
 import { Badge } from '@/components/ui/badge';
 import { toast } from '@/components/ui/use-toast';
@@ -39,6 +40,17 @@ export default function DashboardPage() {
 
   // Get HAR entries from workspace
   const harEntries = currentWorkspace?.harEntries || [];
+
+  // Show uploader if no HAR data
+  if (harEntries.length === 0) {
+    return (
+      <div className="min-h-screen bg-black p-4 md:p-6">
+        <div className="max-w-4xl mx-auto">
+          <HARUploader />
+        </div>
+      </div>
+    );
+  }
 
   // Memoized filtered entries
   const filteredEntries = useMemo(() => {
